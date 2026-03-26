@@ -17,6 +17,12 @@
         .header { text-align: center; padding: 15px; background: var(--bg-card); border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .header h1 { margin: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-size: 20px; }
         
+        /* Navigation Tabs */
+        .tabs { display: flex; justify-content: center; gap: 10px; background: #13151a; padding: 10px; border-bottom: 1px solid #333; }
+        .tab-btn { background: transparent; color: #aaa; border: none; font-size: 14px; font-weight: bold; cursor: pointer; padding: 10px 20px; transition: 0.3s; text-transform: uppercase; border-radius: 5px; }
+        .tab-btn:hover { background: rgba(255,0,85,0.1); color: var(--accent); }
+        .tab-btn.active { color: var(--text); background: var(--accent); box-shadow: 0 4px 10px rgba(255,0,85,0.4); }
+
         .view { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -35,31 +41,21 @@
             background: linear-gradient(145deg, #16191f, #1d2129);
             border-radius: 12px; padding: 25px 20px; text-align: center; cursor: pointer;
             box-shadow: 5px 5px 15px #0a0b0e, -5px -5px 15px #242934;
-            transition: all 0.4s ease;
-            position: relative;
-            transform-style: preserve-3d;
-            border: 1px solid #2d3139;
+            transition: all 0.4s ease; position: relative; transform-style: preserve-3d; border: 1px solid #2d3139;
         }
-        
         .playlist-card:hover {
             transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
             background: linear-gradient(145deg, #ff0055, #00d2ff);
-            box-shadow: 15px 15px 30px rgba(0,0,0,0.7), inset 0 0 10px rgba(255,255,255,0.2);
-            border-color: transparent;
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.7), inset 0 0 10px rgba(255,255,255,0.2); border-color: transparent;
         }
-
         .playlist-card h3 { margin: 0 0 10px 0; color: var(--accent-alt); font-size: 18px; word-break: break-word; transition: color 0.4s; transform: translateZ(20px); }
         .playlist-card p { margin: 0; color: #aaa; font-size: 13px; text-transform: uppercase; font-weight: bold; transition: color 0.4s; transform: translateZ(10px); }
-        
         .playlist-card:hover h3, .playlist-card:hover p { color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
 
         .delete-btn {
-            position: absolute; top: -10px; right: -10px;
-            background: #ff0055; color: white; border: 2px solid #0f1115;
-            border-radius: 50%; width: 30px; height: 30px;
-            font-size: 14px; font-weight: bold; cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            transition: 0.3s; transform: translateZ(30px); z-index: 10;
+            position: absolute; top: -10px; right: -10px; background: #ff0055; color: white; border: 2px solid #0f1115;
+            border-radius: 50%; width: 30px; height: 30px; font-size: 14px; font-weight: bold; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s; transform: translateZ(30px); z-index: 10;
         }
         .delete-btn:hover { background: #ff0000; transform: translateZ(30px) scale(1.2); }
 
@@ -68,10 +64,8 @@
         .now-playing { color: #0f0; font-size: 16px; font-weight: bold; background: #111; padding: 10px 15px; border-radius: 5px; border: 1px solid #333; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .category-dropdown {
-            flex: 1; max-width: 250px; padding: 10px 15px; border-radius: 5px; 
-            background: #111; color: #fff; border: 1px solid var(--accent-alt); 
-            font-size: 14px; font-weight: bold; outline: none; cursor: pointer;
-            display: block !important; 
+            flex: 1; max-width: 250px; padding: 10px 15px; border-radius: 5px; background: #111; color: #fff; 
+            border: 1px solid var(--accent-alt); font-size: 14px; font-weight: bold; outline: none; cursor: pointer; display: block !important; 
         }
 
         .player-container { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); position: relative; touch-action: none; }
@@ -87,13 +81,23 @@
         .channel-card img { width: 55px; height: 55px; object-fit: contain; margin-bottom: 10px; background: rgba(0,0,0,0.4); border-radius: 5px; padding: 5px; }
         .channel-card span { font-size: 11px; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
+        /* Information & Static Views */
+        .content-box { background: var(--bg-card); padding: 30px; border-radius: 10px; border: 1px solid #2d3139; max-width: 800px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); line-height: 1.8; }
+        .content-box a { color: var(--accent-alt); text-decoration: none; font-weight: bold; }
+        .content-box a:hover { text-decoration: underline; }
+
+        /* Popups & Indicators */
         .custom-error { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; z-index: 999; }
         .custom-error h2 { color: var(--accent); margin-bottom: 10px; }
         .custom-error p { color: #fff; font-size: 16px; line-height: 1.5; }
 
-        /* Gesture Indicator Overlay */
         #gestureIndicator { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); padding: 15px 25px; border-radius: 10px; color: #fff; font-size: 24px; font-weight: bold; z-index: 999; pointer-events: none; }
         #systemMessage { text-align: center; color: var(--accent-alt); display: none; margin: 20px 0; font-weight: bold; font-size: 16px; background: #111; padding: 10px; border-radius: 5px; border: 1px solid #333; }
+
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .popup-box { background: #1a1d24; border: 2px solid var(--accent); border-radius: 12px; padding: 25px; max-width: 550px; width: 100%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.9); animation: fadeIn 0.3s; }
+        .popup-box a { color: var(--accent-alt); text-decoration: none; font-weight: bold; }
+        .popup-box a:hover { text-decoration: underline; }
 
         @media (max-width: 600px) {
             .channel-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
@@ -102,6 +106,8 @@
             .search-container { flex-direction: column; align-items: stretch; }
             .channel-count { text-align: center; }
             .playlist-card:hover { transform: translateY(-5px); } 
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -109,6 +115,12 @@
 
     <div class="header">
         <h1>🔐 DARTV Live</h1>
+    </div>
+
+    <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" onclick="switchTab('view-dashboard')">Home</button>
+        <button class="tab-btn" onclick="switchTab('view-about')">About Us</button>
+        <button class="tab-btn" onclick="switchTab('view-privacy')">Privacy Policy</button>
     </div>
 
     <div id="view-dashboard" class="view active">
@@ -120,7 +132,7 @@
             </label>
         </div>
         
-        <div id="systemMessage">System Ready.</div>
+        <div id="systemMessage">Scanning data...</div>
 
         <div id="playlistGrid" class="playlist-grid">
             <div style="grid-column: 1 / -1; text-align: center; color: #555; margin-top: 40px;">
@@ -157,18 +169,73 @@
         <div id="channelGrid" class="channel-grid"></div>
     </div>
 
+    <div id="view-about" class="view">
+        <div class="content-box">
+            <h2 style="color: var(--accent-alt); margin-top: 0;">About Us</h2>
+            <p>Welcome to <strong>DARTV</strong>, your master live sports and media dashboard. Built to offer a seamless, high-quality streaming experience across all your devices, this application dynamically parses your favorite playlists and DRM streams.</p>
+            <p>This project is proudly developed and maintained by <strong>Dar Ajaz</strong>.</p>
+            
+            <h3 style="color: var(--accent); margin-top: 30px;">Contact Information</h3>
+            <p>If you have any questions, require support, or want to report an issue, feel free to contact me directly on WhatsApp, email, or by calling:</p>
+            <ul style="list-style: none; padding: 0; font-size: 16px;">
+                <li style="margin-bottom: 10px;">📞 <strong>Phone / WhatsApp:</strong> +91 7006686584</li>
+                <li>✉️ <strong>Email:</strong> <a href="mailto:darajazb@gmail.com">darajazb@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="view-privacy" class="view">
+        <div class="content-box">
+            <h2 style="color: var(--accent-alt); margin-top: 0;">Privacy Policy</h2>
+            <p>Your privacy is strictly respected. Here is how DARTV handles your data:</p>
+            <ul style="line-height: 1.8; color: #ccc; margin-bottom: 20px;">
+                <li><strong style="color: #fff;">Local Processing:</strong> All playlist files (.m3u, .json, .txt) that you upload or sync are processed entirely locally within your web browser. We do not store your personal media lists on external servers.</li>
+                <li><strong style="color: #fff;">No Tracking:</strong> DARTV does not use cookies to track your viewing habits or inject third-party advertising trackers into your session.</li>
+                <li><strong style="color: #fff;">Browser Extensions:</strong> For a seamless mobile viewing experience, we recommend using third-party browser extensions (like CORS Unblocker or Kiwi Browser). Please refer to their respective privacy policies regarding how they handle network requests.</li>
+            </ul>
+            <p>If you have any privacy concerns, please contact Dar Ajaz directly via the details on the About Us page.</p>
+        </div>
+    </div>
+
+    <div id="successPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h2 style="color: #0f0; margin-top: 0;">✅ Playlists Fetched Successfully!</h2>
+            
+            <p style="font-size: 16px; color: #fff; font-weight: bold; margin-bottom: 20px; line-height: 1.4;">
+                For better viewing experience use this without any stream block.
+            </p>
+            
+            <div style="background: #111; padding: 15px; border-radius: 8px; text-align: left; border: 1px solid #333; margin-bottom: 20px; line-height: 1.5;">
+                <p style="margin-top: 0; color: #ccc; font-size: 14px;">
+                    <strong>📱 Mobile Users:</strong><br>
+                    Download <a href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser" target="_blank">Kiwi Browser</a> from the Play Store. It supports browser plugins on your phone.
+                </p>
+                <hr style="border-color: #333; margin: 10px 0;">
+                <p style="margin-bottom: 0; color: #ccc; font-size: 14px;">
+                    <strong>🧩 Extension Required:</strong><br>
+                    Install the <a href="https://chromewebstore.google.com/detail/cors-unblocker/mhophcedkkpfkdgmpphhiafcodcckbcp" target="_blank">CORS Unblocker Plugin</a> and turn it ON to bypass all stream restrictions.
+                </p>
+            </div>
+
+            <p style="font-size: 15px; color: #fff; margin-bottom: 5px;">Regards, <strong>Dar Ajaz</strong></p>
+            <p style="font-size: 13px; color: #aaa; margin-top: 0; margin-bottom: 15px;">Feel free to contact me on WhatsApp, email or direct by calling.</p>
+            
+            <div style="background: rgba(255, 0, 85, 0.1); padding: 10px; border-radius: 5px; border: 1px dashed var(--accent); margin-bottom: 20px; display: inline-block;">
+                <span style="font-size: 14px; font-weight: bold; color: var(--accent);">✉️ darajazb@gmail.com</span> &nbsp; | &nbsp; 
+                <span style="font-size: 14px; font-weight: bold; color: var(--accent);">📞 7006686584</span>
+            </div>
+            
+            <button class="btn btn-red" style="width: 100%; font-size: 16px; padding: 12px;" onclick="closePopup()">Close & Continue</button>
+        </div>
+    </div>
+
     <script>
-        // ==========================================
-        // YOUR CLOUDFLARE WORKER LINK
-        // ==========================================
-        const CLOUDFLARE_PROXY = "https://drm-proxy.darajazb.workers.dev/?url=";
-
-
         let globalPlaylists = []; 
         let currentActiveChannels = []; 
         const githubRepoApiUrl = "https://api.github.com/repos/dartv-ajaz/chaupal/contents/";
         const defaultLogo = "https://via.placeholder.com/150x150/1a1d24/ff0055?text=DarTv";
 
+        // --- UI & TAB NAVIGATION ---
         function showMessage(msg, isError = false) {
             const el = document.getElementById('systemMessage');
             el.innerHTML = msg;
@@ -177,19 +244,39 @@
             el.style.borderColor = isError ? '#ff0055' : '#333';
         }
 
-        function switchView(viewId) {
+        function showPopup() {
+            document.getElementById('successPopup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('successPopup').style.display = 'none';
+        }
+
+        function switchTab(viewId) {
+            // Stop player if leaving the player view
+            if (viewId !== 'view-player' && typeof jwplayer("jw-player-container").getState === "function" && jwplayer("jw-player-container").getState() === "playing") {
+                jwplayer("jw-player-container").stop();
+            }
+            
+            // Manage Views
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
+            
+            // Manage Tabs (Ignore if switching into player mode which has no tab)
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`[onclick="switchTab('${viewId}')"]`);
+            if(activeBtn) activeBtn.classList.add('active');
+            
+            // Hide Tabs entirely if in player mode to keep the screen clean
+            document.getElementById('mainTabs').style.display = (viewId === 'view-player') ? 'none' : 'flex';
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function goBackToDashboard() {
-            if (jwplayer("jw-player-container").getState() === "playing") {
-                jwplayer("jw-player-container").stop();
-            }
             document.getElementById("dartv-error").style.display = "none";
             document.getElementById("searchInput").value = ""; 
-            switchView('view-dashboard');
+            switchTab('view-dashboard');
         }
 
         // --- FETCH LOGIC ---
@@ -215,8 +302,9 @@
 
                 await Promise.all(fetchPromises);
                 renderDashboard();
-                showMessage('Playlists Synced Successfully!');
-                setTimeout(() => document.getElementById('systemMessage').style.display = 'none', 3000);
+                document.getElementById('systemMessage').style.display = 'none';
+                showPopup(); // Trigger the success popup!
+                
             } catch (error) {
                 console.error("Fetch failed:", error);
                 showMessage(error.message, true);
@@ -235,8 +323,8 @@
                     filesRead++;
                     if(filesRead === files.length) {
                         renderDashboard();
-                        showMessage('Local Files Uploaded!', false);
-                        setTimeout(() => document.getElementById('systemMessage').style.display = 'none', 3000);
+                        document.getElementById('systemMessage').style.display = 'none';
+                        showPopup(); // Trigger the success popup!
                     }
                 };
                 reader.readAsText(files[i]);
@@ -306,7 +394,7 @@
             }
         }
 
-        // --- DASHBOARD UI ---
+        // --- DASHBOARD RENDERING ---
         function renderDashboard() {
             const grid = document.getElementById('playlistGrid');
             grid.innerHTML = '';
@@ -351,7 +439,7 @@
             });
 
             document.getElementById('searchInput').value = ""; 
-            switchView('view-player');
+            switchTab('view-player');
             renderChannelGrid(currentActiveChannels);
 
             if(currentActiveChannels.length > 0) {
@@ -390,7 +478,7 @@
             });
         }
 
-        // --- PLAYBACK ENGINE WITH CLOUDFLARE ---
+        // --- PLAYBACK ENGINE (PURE NATIVE) ---
         function determineStreamType(url) {
             const cleanUrl = url.split('?')[0].toLowerCase();
             if (cleanUrl.endsWith('.mpd')) return 'dash';
@@ -420,6 +508,7 @@
 
             const lic = channel.license || channel.license_url || channel.widevine;
             
+            // Clean direct DRM logic (No Proxy)
             if (lic && lic.trim() !== "") {
                 let drmHeaders = [];
                 if(channel.kodiHeaders && Object.keys(channel.kodiHeaders).length > 0) {
@@ -432,14 +521,8 @@
                     drmHeaders.push({ name: "Content-Type", value: "application/octet-stream" });
                 }
 
-                // Inject the Cloudflare Proxy
-                let finalDrmUrl = lic;
-                if (CLOUDFLARE_PROXY && CLOUDFLARE_PROXY.includes("workers.dev")) {
-                    finalDrmUrl = CLOUDFLARE_PROXY + encodeURIComponent(lic);
-                }
-
                 setupConfig.drm = {
-                    widevine: { url: finalDrmUrl, headers: drmHeaders }
+                    widevine: { url: lic, headers: drmHeaders }
                 };
             }
 
@@ -447,11 +530,10 @@
             
             playerInstance.on('error', function(e) {
                 console.error("JW Error:", e);
-                showCustomError(`Failed to Play: Code ${e.code}. If 403, your token expired.`);
+                showCustomError(`Failed to Play: Code ${e.code}. Ensure CORS Unblocker plugin is ENABLED.`);
             });
             playerInstance.on('setupError', function(e) {
-                console.error("Setup Error:", e);
-                showCustomError("Setup Failed. Ensure you are on a Local Server or GitHub Pages.");
+                showCustomError("Setup Failed. Ensure CORS Unblocker plugin is ENABLED.");
             });
         }
 
