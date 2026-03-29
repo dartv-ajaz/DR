@@ -19,7 +19,7 @@
         
         .container { max-width: 1200px; margin: 0 auto; }
         
-        #toolsView { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        #toolsView { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; transition: 0.3s;}
         @media (max-width: 768px) { #toolsView { grid-template-columns: 1fr; } body { padding: 10px; } }
 
         .panel { background: var(--bg-panel); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px;}
@@ -62,15 +62,14 @@
         .play-btn:hover { background: var(--bg-panel); border-color: var(--secondary); box-shadow: inset 0 0 10px rgba(0,210,255,0.2); }
         .ch-logo { width: 30px; height: 30px; object-fit: contain; margin-right: 10px; border-radius: 4px; background: #111;}
 
-        /* 🎬 INLINE PLAYER VIEW */
-        #playerView { display: none; margin-bottom: 20px; }
+        /* 🎬 INLINE PLAYER & LANDSCAPE CSS */
+        #playerView { display: none; margin-bottom: 20px; transition: 0.3s;}
         .player-header { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px 15px; border-radius: 8px 8px 0 0; border: 1px solid #333; border-bottom: none;}
-        .now-playing { font-weight: bold; color: var(--secondary); font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%;}
+        .now-playing { font-weight: bold; color: var(--secondary); font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%; text-transform: uppercase;}
         
-        .video-wrapper { width: 100%; aspect-ratio: 16 / 9; background: #000; overflow: hidden; position: relative; touch-action: none; border-radius: 0 0 8px 8px; border: 1px solid #333;}
+        .video-wrapper { width: 100%; aspect-ratio: 16 / 9; background: #000; overflow: hidden; position: relative; touch-action: none; border-radius: 0; border: 1px solid #333; border-bottom: none;}
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* 200% BRIGHTNESS BOOST CSS */
         .video-filter-container { width: 100%; height: 100%; filter: brightness(100%); transition: filter 0.1s linear; }
 
         #gestureIndicator { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 10px; color: #fff; font-size: 26px; font-weight: bold; z-index: 60; pointer-events: none; border: 2px solid #333; }
@@ -80,6 +79,47 @@
         
         .nav-btn { background: #333; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
         .nav-btn:hover { background: var(--primary); }
+
+        .suggested-section { padding: 15px; background: #111; border-radius: 0 0 8px 8px; border: 1px solid #333; }
+        .suggested-title { font-size: 13px; font-weight: bold; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 8px;}
+        .circular-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; padding-top: 5px; scrollbar-width: none;}
+        .circular-container::-webkit-scrollbar { display: none; }
+        .circle-tile { min-width: 75px; width: 75px; height: 75px; border-radius: 50%; background: #222630; border: 2px solid #444; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; padding: 5px; overflow: hidden; text-overflow: ellipsis; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; }
+        .circle-tile::before { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); border-radius: 50%; transition: 0.3s; }
+        .circle-tile span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
+        .circle-tile:hover { transform: scale(1.1); border-color: var(--secondary); box-shadow: 0 0 15px var(--secondary); z-index: 10; }
+
+        /* 📱 MOBILE LANDSCAPE FULLSCREEN MAGIC */
+        @media screen and (max-width: 950px) and (orientation: landscape) {
+            body.playing-landscape { padding: 0 !important; margin: 0 !important; background: #000; overflow: hidden; }
+            body.playing-landscape .header, 
+            body.playing-landscape #toolsView, 
+            body.playing-landscape #playlistsView, 
+            body.playing-landscape #channelsView { display: none !important; }
+            
+            body.playing-landscape #playerView { display: flex !important; flex-direction: column; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; margin: 0; background: #000; justify-content: center; border: none;}
+            
+            body.playing-landscape .video-wrapper { width: 100vw; height: 100vh; aspect-ratio: auto; border: none; border-radius: 0; flex-grow: 1; }
+            
+            /* Hidden Overlays in Landscape */
+            body.playing-landscape .player-header { 
+                position: absolute; top: 0; left: 0; width: 100%; z-index: 10001; 
+                background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); 
+                border: none; border-radius: 0; padding: 15px 20px; box-sizing: border-box; 
+                transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            }
+            body.playing-landscape .suggested-section { 
+                position: absolute; bottom: 0; left: 0; width: 100%; box-sizing: border-box;
+                background: linear-gradient(to top, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.6), transparent); border: none; border-radius: 0;
+                transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 10000; padding: 30px 15px 15px 15px;
+            }
+            
+            /* Reveal classes */
+            body.playing-landscape .player-header.show-overlay,
+            body.playing-landscape .suggested-section.show-overlay { transform: translateY(0); }
+            body.playing-landscape .suggested-title { display: none; } /* Hide title to save space */
+        }
     </style>
 </head>
 <body>
@@ -139,7 +179,7 @@
         <div id="playerView">
             <div class="player-header">
                 <div class="now-playing" id="nowPlayingText">Select a channel...</div>
-                <button class="nav-btn" onclick="closePlayer()">Close Player ✖</button>
+                <button class="nav-btn" onclick="closePlayer()">Close ✖</button>
             </div>
 
             <div class="video-wrapper" id="playerWrapper">
@@ -158,9 +198,16 @@
                 </div>
             </div>
 
-            <div class="proxy-toggle" style="background: #222; border-color: #333;">
-                <input type="checkbox" id="useStreamProxy">
-                <label for="useStreamProxy" style="font-weight: bold; cursor:pointer;">🛡️ Enable Cloudflare Proxy (Use if video gives Error 403)</label>
+            <div class="suggested-section">
+                <div class="proxy-toggle" style="background: transparent; border-color: #333; margin-top: 0; margin-bottom: 5px; padding: 0;">
+                    <input type="checkbox" id="useStreamProxy">
+                    <label for="useStreamProxy" style="font-weight: bold; cursor:pointer;">🛡️ Enable Cloudflare Proxy (Use if video gives Error 403)</label>
+                </div>
+
+                <div id="suggestedSectionWrapper" style="display: none;">
+                    <div class="suggested-title">🌟 More from this Category</div>
+                    <div class="circular-container" id="circularContainer"></div>
+                </div>
             </div>
         </div>
 
@@ -197,10 +244,11 @@
             { type: 'link', label: "12. Custom: Soledad TV", value: "https://raw.githubusercontent.com/Soledadrs/jiekou/606200413054f2e24f995e3c404393782db27704/soledadTVbox/m3u/IPTV.m3u", icon: "📺" }
         ];
 
-        let state = { playlists: [], currentCategories: {}, totalChannelsActive: 0 };
+        let state = { playlists: [], currentCategories: {}, totalChannelsActive: 0, currentCategoryName: "" };
 
         window.triggerPlay = function(categoryName, idx) {
             const ch = state.currentCategories[categoryName][idx];
+            state.currentCategoryName = categoryName; 
             playChannel(ch.url, ch.embed, ch.name, ch.license, ch.token, ch.ref, ch.ua, ch.headers);
         };
 
@@ -215,21 +263,30 @@
             loadLocalPlaylists(); renderDirectoryGrid(); showView('directory'); 
         });
 
-        // 👁️ VIEW LOGIC (INLINE PLAYER)
+        // 👁️ VIEW LOGIC (MOBILE HIDE EVERYTHING FIX)
         function showView(view) {
+            const isMobile = window.innerWidth <= 768;
+
             if (view === 'directory') {
+                document.getElementById('toolsView').style.display = 'grid'; // Show tools
                 document.getElementById('playlistsView').style.display = 'block';
                 document.getElementById('channelsView').style.display = 'none';
                 document.getElementById('playerView').style.display = 'none';
+                document.querySelector('.header').style.display = 'block'; // Show Header
+                document.body.classList.remove('playing-landscape');
             } else if (view === 'channels') {
+                if (isMobile) {
+                    document.getElementById('toolsView').style.display = 'none'; // Hide Tools entirely on mobile
+                    document.querySelector('.header').style.display = 'none'; // Hide Header entirely on mobile
+                }
                 document.getElementById('playlistsView').style.display = 'none';
                 document.getElementById('channelsView').style.display = 'block';
-                // Note: We don't hide playerView here so it stays open if a video is playing
             }
         }
 
         function closePlayer() {
             document.getElementById('playerView').style.display = 'none';
+            document.body.classList.remove('playing-landscape');
             if(jwplayer("jw-player-container").getState) jwplayer("jw-player-container").stop();
             document.getElementById('iframe-element').src = ""; 
         }
@@ -454,6 +511,26 @@
         }
 
         // ==========================================
+        // 🌟 SUGGESTED CHANNELS LOGIC
+        // ==========================================
+        function populateGlowingTiles() {
+            const container = document.getElementById('circularContainer');
+            const section = document.getElementById('suggestedSectionWrapper');
+            container.innerHTML = "";
+
+            if (!state.currentCategoryName || !state.currentCategories[state.currentCategoryName]) { section.style.display = 'none'; return; }
+            section.style.display = 'block';
+            state.currentCategories[state.currentCategoryName].forEach((ch, idx) => {
+                const circle = document.createElement('div'); circle.className = 'circle-tile'; circle.title = ch.name;
+                if(ch.logo) { let img = new Image(); img.src = ch.logo; img.onload = () => { circle.style.backgroundImage = `url('${ch.logo}')`; }; }
+                let shortName = ch.name.length > 13 ? ch.name.substring(0, 11) + ".." : ch.name;
+                circle.innerHTML = `<span>${shortName}</span>`;
+                circle.onclick = () => window.triggerPlay(state.currentCategoryName, idx);
+                container.appendChild(circle);
+            });
+        }
+
+        // ==========================================
         // 🎬 3. INLINE PLAYER LOGIC
         // ==========================================
         function determineStreamType(url) {
@@ -468,6 +545,7 @@
             let url = document.getElementById('manualUrl').value.trim(), lic = document.getElementById('manualLic').value.trim(), tok = document.getElementById('manualToken').value.trim();
             if(!url) return;
             let isEmbed = url.includes('.php') || url.includes('player');
+            state.currentCategoryName = ""; 
             playChannel(isEmbed ? "" : url, isEmbed ? url : "", "Manual Stream", lic, tok, "", "");
         }
 
@@ -475,26 +553,28 @@
             document.getElementById('playerView').style.display = 'block';
             document.getElementById("dartv-error").style.display = "none";
             document.getElementById('nowPlayingText').innerText = `📺 ${name}`;
+            document.body.classList.add('playing-landscape'); // Pre-activate landscape mode rules
             
-            // Reset Brightness & UI
+            populateGlowingTiles(); 
+
             currentBrightness = 100;
             document.getElementById('videoFilterContainer').style.filter = `brightness(100%)`;
 
-            // Smooth scroll to player
-            window.scrollTo({ top: document.getElementById('playerView').offsetTop - 15, behavior: 'smooth' });
+            // Smooth scroll to player ONLY if not in mobile landscape (otherwise it jumps weirdly)
+            if (!(window.innerWidth <= 950 && window.matchMedia("(orientation: landscape)").matches)) {
+                window.scrollTo({ top: document.getElementById('playerView').offsetTop - 15, behavior: 'smooth' });
+            }
             
             const jwContainer = document.getElementById('jw-player-container');
             const iframeContainer = document.getElementById('iframe-container');
             const iframeEl = document.getElementById('iframe-element');
             const useProxy = document.getElementById('useStreamProxy').checked;
 
-            // --- SULTAN VIP EXCEPTION ---
             const playlistTitle = (document.getElementById('currentPlaylistTitle').innerText || "").toLowerCase();
             if (playlistTitle.includes('sultan vip')) {
                 jwContainer.style.display = 'none'; iframeContainer.style.display = 'block'; iframeEl.src = embedUrl || streamUrl; return;
             }
 
-            // --- IFRAME LOGIC ---
             if ((!streamUrl && embedUrl) || (streamUrl && streamUrl.includes('.php')) || (embedUrl && embedUrl.includes('.php'))) {
                 jwContainer.style.display = 'none'; iframeContainer.style.display = 'block';
                 let targetUrl = embedUrl || streamUrl;
@@ -507,7 +587,6 @@
                 return;
             }
 
-            // --- JW PLAYER LOGIC ---
             iframeContainer.style.display = 'none'; iframeEl.src = ""; jwContainer.style.display = 'block';
             let finalUrl = streamUrl;
 
@@ -549,44 +628,68 @@
         }
 
         // ==========================================
-        // ✋ 4. 200% SWIPE GESTURES (MOBILE FIXES)
+        // ✋ 4. 200% SWIPE GESTURES & TOUCH OVERLAYS
         // ==========================================
         const playerWrapper = document.getElementById('playerWrapper');
         const videoFilter = document.getElementById('videoFilterContainer');
-        let startX, startY, initVol, initPos, initBright, isTouchArea, isLeftSide;
-        let currentBrightness = 100; // Brightness up to 200%
+        const suggSection = document.querySelector('.suggested-section');
+        const pHeader = document.querySelector('.player-header');
+        
+        let startX, startY, initVol, initPos, initBright, isTouchArea, isLeftSide, isTap;
+        let currentBrightness = 100;
+        let overlayTimeout;
+
+        // Function to show Landscape Overlay UI
+        function toggleLandscapeOverlay() {
+            if (suggSection.classList.contains('show-overlay')) {
+                suggSection.classList.remove('show-overlay');
+                pHeader.classList.remove('show-overlay');
+            } else {
+                suggSection.classList.add('show-overlay');
+                pHeader.classList.add('show-overlay');
+                clearTimeout(overlayTimeout);
+                overlayTimeout = setTimeout(() => {
+                    suggSection.classList.remove('show-overlay');
+                    pHeader.classList.remove('show-overlay');
+                }, 4000); // Hides after 4 seconds
+            }
+        }
 
         playerWrapper.addEventListener('touchstart', (e) => {
             if(e.touches.length !== 1) return;
             const rect = playerWrapper.getBoundingClientRect();
-            const touchY = e.touches[0].clientY - rect.top;
-            if(touchY > rect.height * 0.80) return; // Ignore bottom control bar area
             
+            isTap = true; // Assume tap initially
             startX = e.touches[0].clientX - rect.left; startY = e.touches[0].clientY; 
             isLeftSide = startX < (rect.width / 2);
+            
+            const touchY = e.touches[0].clientY - rect.top;
+            if(touchY > rect.height * 0.85) { isTouchArea = false; return; }
             
             try { initVol = jwplayer("jw-player-container").getVolume() || 50; initPos = jwplayer("jw-player-container").getPosition() || 0; } catch(err) { initVol = 50; initPos = 0; }
             initBright = currentBrightness; isTouchArea = true;
         }, {passive: true});
 
         playerWrapper.addEventListener('touchmove', (e) => {
-            if(!isTouchArea || e.touches.length !== 1) return;
+            if(e.touches.length !== 1) return;
             const rect = playerWrapper.getBoundingClientRect();
-            const dx = (e.touches[0].clientX - rect.left) - startX, dy = startY - e.touches[0].clientY, ind = document.getElementById('gestureIndicator');
+            const dx = (e.touches[0].clientX - rect.left) - startX, dy = startY - e.touches[0].clientY;
+            
+            if (Math.abs(dx) > 10 || Math.abs(dy) > 10) isTap = false; // It's a swipe, not a tap
+
+            if(!isTouchArea) return;
+            const ind = document.getElementById('gestureIndicator');
 
             if(Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 20) {
-                e.preventDefault(); // Stop page scrolling
-                
+                e.preventDefault(); 
                 if (isLeftSide) {
-                    // Brightness 10% to 200%
                     currentBrightness = Math.max(10, Math.min(200, initBright + (dy / 1.5)));
                     videoFilter.style.filter = `brightness(${currentBrightness}%)`;
                     ind.style.display = 'block'; ind.innerText = `☀️ ${Math.round(currentBrightness)}%`;
                 } else {
-                    // Volume scaling logic: 100 physical JWPlayer volume = 200% UI volume
                     let physicalVol = Math.max(0, Math.min(100, initVol + (dy / 2)));
                     try { jwplayer("jw-player-container").setVolume(physicalVol); } catch(err) {}
-                    let displayVol = Math.round(physicalVol * 2); // Show up to 200%
+                    let displayVol = Math.round(physicalVol * 2); 
                     ind.style.display = 'block'; ind.innerText = `🔊 ${displayVol}%`;
                 }
             } 
@@ -596,7 +699,26 @@
             }
         }, {passive: false});
 
-        playerWrapper.addEventListener('touchend', () => { isTouchArea = false; setTimeout(() => { document.getElementById('gestureIndicator').style.display = 'none'; }, 800); });
+        playerWrapper.addEventListener('touchend', () => { 
+            isTouchArea = false; 
+            setTimeout(() => { document.getElementById('gestureIndicator').style.display = 'none'; }, 800); 
+            
+            // Landscape Touch-to-Reveal Logic
+            if (isTap && window.matchMedia("(orientation: landscape)").matches && window.innerWidth <= 950) {
+                toggleLandscapeOverlay();
+            }
+        });
+        
+        // Handle physical rotation dynamically
+        window.addEventListener("orientationchange", function() {
+            setTimeout(() => {
+                if (document.getElementById('playerView').style.display === 'block') {
+                    if(window.matchMedia("(orientation: landscape)").matches) {
+                        window.scrollTo(0, 0); // Lock to top
+                    }
+                }
+            }, 200);
+        });
     </script>
 </body>
 </html>
