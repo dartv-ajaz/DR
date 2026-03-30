@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DARTV | Master Live Dashboard</title>
+    <title>DARTV | Premium OTT Dashboard</title>
     
     <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
     <script type="text/javascript">
@@ -11,199 +11,224 @@
     </script>
 
     <style>
-        :root { --bg-dark: #0f1115; --bg-card: #1a1d24; --accent: #ff0055; --accent-alt: #00d2ff; --text: #fff; }
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        /* 🔥 PREMIUM OTT THEME 🔥 */
+        :root { --bg-base: #090a0f; --bg-surface: #13151f; --bg-glass: rgba(19, 21, 31, 0.7); --accent: #e50914; --accent-glow: rgba(229, 9, 20, 0.4); --text: #ffffff; --text-muted: #9ba0b5; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
         
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-dark); color: var(--text); margin: 0; padding: 15px; overflow-x: hidden;}
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-base); color: var(--text); overflow-x: hidden; }
         
-        .header { text-align: center; padding: 15px; background: var(--bg-card); border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border-radius: 8px; margin-bottom: 20px;}
-        .header h1 { margin: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-size: 20px; }
+        /* App Bar */
+        .app-bar { position: sticky; top: 0; z-index: 1000; background: var(--bg-glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .app-logo { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: var(--text); display: flex; align-items: center; gap: 8px;}
+        .app-logo span { color: var(--accent); }
         
-        .view { display: none; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
+        .view { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Dashboard & File Controls */
-        .dashboard-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; align-items: center; background: var(--bg-card); padding: 15px; border-radius: 10px; border: 1px solid #2d3139;}
-        .source-dropdown, .custom-input { padding: 10px; border-radius: 5px; background: #111; color: var(--accent-alt); border: 1px solid #444; font-size: 14px; font-weight: bold; outline: none;}
-        .source-dropdown { flex-grow: 1; max-width: 300px; }
-        .custom-input { flex: 1; min-width: 250px; color: #fff; }
-        .custom-input:focus { border-color: var(--accent-alt); }
-        .btn { background: var(--accent-alt); color: #000; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s;}
-        .btn-red { background: var(--accent); color: white; }
-        
-        /* Playlists Grid */
-        .playlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; padding: 10px 0; }
-        .playlist-card { background: linear-gradient(145deg, #16191f, #1d2129); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; box-shadow: 5px 5px 15px #0a0b0e, -5px -5px 15px #242934; position: relative; border: 1px solid #2d3139;}
-        .playlist-card h3 { margin: 0 0 10px 0; color: var(--accent-alt); font-size: 16px; word-break: break-word;}
-        .playlist-card p { margin: 0; color: #aaa; font-size: 12px; font-weight: bold;}
-        .delete-btn { position: absolute; top: -10px; right: -10px; background: #ff0055; color: white; border: 2px solid #0f1115; border-radius: 50%; width: 28px; height: 28px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 10; }
+        /* Buttons & Inputs */
+        .btn { background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn:hover, .btn:active { background: rgba(255,255,255,0.2); transform: scale(0.98); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-primary:hover, .btn-primary:active { background: #b80710; }
 
-        /* VIEW 2: Player & Channels Base */
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
-        .now-playing { color: #0f0; font-size: 14px; font-weight: bold; background: #111; padding: 10px; border-radius: 5px; border: 1px solid #333; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;}
-        .category-dropdown { flex: 1; max-width: 250px; }
+        .dashboard-tools { display: flex; flex-direction: column; gap: 15px; background: var(--bg-surface); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; }
+        .tool-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;}
+        .input-box { flex: 1; min-width: 200px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px; border-radius: 8px; font-size: 14px; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: var(--accent); }
 
-        /* 🔥 PROXY ALERT BOX 🔥 */
-        .proxy-alert-box { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; color: var(--accent-alt); margin-bottom: 20px; background: #111; padding: 15px; border-radius: 8px; border: 2px solid #333; transition: 0.3s; }
-        .proxy-alert-box input { cursor: pointer; width: 20px; height: 20px; accent-color: var(--accent-alt);}
-        .proxy-alert-box.connected { border-color: #0f0; color: #0f0; box-shadow: inset 0 0 10px rgba(0,255,0,0.1); }
+        /* Dashboard Playlist Grid */
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .playlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .playlist-card { background: var(--bg-surface); border-radius: 12px; padding: 25px 20px; position: relative; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; overflow: hidden; text-align: center;}
+        .playlist-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .playlist-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: #1a1d2b; }
+        .playlist-card:hover::before { transform: scaleX(1); }
+        .playlist-card h3 { font-size: 16px; margin-bottom: 5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .playlist-card p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .delete-btn { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; border-radius: 50%; background: rgba(229, 9, 20, 0.1); color: var(--accent); border: none; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: 0.3s; }
+        .playlist-card:hover .delete-btn { opacity: 1; }
 
-        /* Player Styling */
-        .player-container { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); position: relative; touch-action: none; border: 1px solid #333; z-index: 50;}
-        .video-filter-container { width: 100%; height: 100%; filter: brightness(100%); transition: filter 0.1s linear; }
-        
-        /* 🔥 THE SWIPE SHIELD (Fixes Swipe & Tap Issues) 🔥 */
-        .swipe-shield { position: absolute; top: 0; left: 0; width: 100%; height: 75%; z-index: 90; cursor: pointer;}
-        #gestureIndicator { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 10px; color: #fff; font-size: 30px; font-weight: bold; z-index: 999; pointer-events: none; border: 2px solid #333;}
-        
-        .custom-error { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; z-index: 999; }
-        .custom-error h2 { color: var(--accent); margin-bottom: 10px; font-size: 18px;}
-        .custom-error p { color: #fff; font-size: 13px; line-height: 1.5; }
+        /* 🎬 PLAYER VIEW 🎬 */
+        .player-wrapper { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 50; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);}
+        .video-filter { width: 100%; height: 100%; filter: brightness(100%); transition: filter 0.1s linear; }
 
-        /* Circular Channels */
-        .suggested-section { padding: 15px; background: var(--bg-card); border: 1px solid #333; border-radius: 8px; margin-bottom: 20px; }
-        .suggested-title { font-size: 13px; font-weight: bold; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;}
-        .suggested-title span { color: var(--accent-alt); }
-        .circular-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; padding-top: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch;}
+        /* Proxy Alert Ribbon */
+        .proxy-ribbon { display: flex; align-items: center; justify-content: space-between; background: rgba(229, 9, 20, 0.1); border: 1px solid rgba(229, 9, 20, 0.3); padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; transition: 0.3s; }
+        .proxy-ribbon.connected { background: rgba(46, 213, 115, 0.1); border-color: rgba(46, 213, 115, 0.3); }
+        .proxy-ribbon label { font-weight: 600; font-size: 13px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;}
+        .proxy-ribbon input[type="checkbox"] { width: 20px; height: 20px; accent-color: #2ed573; cursor: pointer; }
+
+        /* Categories (Horizontal Scroll Pills) */
+        .category-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin-bottom: 20px;}
+        .category-scroll::-webkit-scrollbar { display: none; }
+        .cat-pill { padding: 10px 20px; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.3s; white-space: nowrap; }
+        .cat-pill.active { background: var(--text); color: #000; border-color: var(--text); }
+
+        /* GOOL GOOL CHANNELS (Circular Avatars) */
+        .suggested-section { padding: 15px; background: var(--bg-surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+        .suggested-title { font-size: 13px; font-weight: bold; color: var(--text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
+        .circular-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; padding-top: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch;}
         .circular-container::-webkit-scrollbar { display: none; }
-        .circle-tile { min-width: 75px; width: 75px; height: 75px; border-radius: 50%; background: #222630; border: 2px solid #444; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); padding: 5px; overflow: hidden; background-size: cover; background-position: center; position: relative; }
-        .circle-tile::before { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.6); border-radius: 50%; }
-        .circle-tile span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
+        .circle-tile { min-width: 75px; width: 75px; height: 75px; border-radius: 50%; background: #222630; border: 2px solid #444; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; padding: 5px; overflow: hidden; background-size: cover; background-position: center; position: relative; }
+        .circle-tile::before { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); border-radius: 50%; transition: 0.3s; }
+        .circle-tile span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .circle-tile:hover { transform: scale(1.1); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); z-index: 10; }
+        .circle-tile:hover::before { background: rgba(0,0,0,0.1); }
+
+        /* Channel Grid (OTT Style Cards) */
+        .channel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; padding-bottom: 40px; }
+        .channel-card { background: var(--bg-surface); border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; aspect-ratio: 1; justify-content: center; }
+        .channel-card:active { transform: scale(0.95); }
+        .channel-card:hover { border-color: var(--accent); background: #1a1d2b; }
+        .channel-card img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); padding: 5px;}
+        .channel-card span { font-size: 12px; font-weight: 600; color: #e1e1e1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* 🔥 MX PLAYER STYLE GESTURE UI 🔥 */
+        .swipe-shield { position: absolute; top: 0; left: 0; width: 100%; height: 75%; z-index: 90; }
+        .gesture-ui { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 120px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border-radius: 20px; display: none; flex-direction: column; justify-content: flex-end; align-items: center; padding: 10px 0; z-index: 100; border: 1px solid rgba(255,255,255,0.1); }
+        .gesture-ui-left { left: 20px; }
+        .gesture-ui-right { right: 20px; }
+        .gesture-bar-bg { width: 4px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 4px; position: relative; margin-top: 8px; overflow: hidden;}
+        .gesture-bar-fill { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--accent); border-radius: 4px; transition: height 0.1s linear;}
+        .gesture-icon { font-size: 16px; color: #fff; }
         
-        .channel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; padding-bottom: 30px; }
-        .channel-card { background: var(--bg-card); border: 1px solid #2d3139; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; aspect-ratio: 1; }
-        .channel-card img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; background: rgba(0,0,0,0.4); border-radius: 5px; padding: 3px; }
-        .channel-card span { font-size: 10px; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .seek-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); padding: 15px 25px; border-radius: 30px; color: #fff; font-size: 18px; font-weight: bold; z-index: 100; display: none; border: 1px solid rgba(255,255,255,0.1); }
 
-        #systemMessage { position: fixed; top: 20px; right: 20px; color: #fff; display: none; font-weight: bold; font-size: 14px; background: #111; padding: 15px 25px; border-radius: 8px; border-left: 5px solid var(--accent-alt); box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 99999;}
+        .custom-error { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 99; }
+        .custom-error h2 { color: var(--accent); margin-bottom: 10px; font-size: 20px;}
+        .custom-error p { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .nav-bar { flex-direction: column; align-items: stretch; }
-            .category-dropdown { max-width: 100%; }
+        #systemMessage { position: fixed; top: 20px; right: 20px; color: #fff; display: none; font-weight: 600; font-size: 13px; background: var(--bg-glass); backdrop-filter: blur(10px); padding: 15px 25px; border-radius: 8px; border-left: 5px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 99999; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);}
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* 📱 MOBILE RESPONSIVE */
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+            .channel-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .player-wrapper { border-radius: 0; width: 100vw; margin-left: -20px; border-left: none; border-right: none;}
         }
 
-        /* 🔥 MOBILE LANDSCAPE OVERLAY 🔥 */
+        /* 📱 OTT LANDSCAPE FULLSCREEN (GUARANTEED) 📱 */
         @media screen and (max-width: 1200px) and (orientation: landscape) {
-            body.mobile-playing { padding: 0 !important; margin: 0 !important; background: #000; overflow: hidden; }
-            body.mobile-playing .header, 
+            body.mobile-playing { overflow: hidden; background: #000; }
+            body.mobile-playing .app-bar, 
             body.mobile-playing #view-dashboard, 
-            body.mobile-playing .nav-bar,
-            body.mobile-playing .proxy-alert-box,
+            body.mobile-playing .proxy-ribbon,
+            body.mobile-playing .category-scroll,
             body.mobile-playing .search-container,
-            body.mobile-playing .channel-grid { display: none !important; }
+            body.mobile-playing .channel-grid,
+            body.mobile-playing #portraitSuggestedSection { display: none !important; } /* Hide bottom stuff */
             
-            body.mobile-playing #view-player { display: flex !important; flex-direction: column; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; margin: 0; padding: 0; background: #000; justify-content: center; }
-            body.mobile-playing .player-container { width: 100vw; height: 100vh; aspect-ratio: auto; border: none; border-radius: 0; margin: 0; flex-grow: 1;}
+            body.mobile-playing #view-player { padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; z-index: 9999; background: #000; }
+            body.mobile-playing .player-wrapper { border-radius: 0; margin: 0; width: 100vw; height: 100vh; border: none; }
             
             /* Overlay UI */
-            body.mobile-playing .suggested-section { 
-                display: block !important; position: absolute; bottom: 0; left: 0; width: 100%; box-sizing: border-box; margin: 0;
-                background: linear-gradient(to top, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.6), transparent); border: none; border-radius: 0;
-                transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                z-index: 10000; padding: 20px 15px 10px 15px;
+            body.mobile-playing .landscape-overlay { 
+                display: block !important; position: absolute; bottom: 0; left: 0; width: 100%; 
+                background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.7) 60%, transparent); 
+                padding: 40px 20px 10px 20px; z-index: 10000; 
+                transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
-            body.mobile-playing .player-header-overlay {
-                display: flex !important; justify-content: space-between; align-items: center;
-                position: absolute; top: 0; left: 0; width: 100%; z-index: 10001; 
+            body.mobile-playing .landscape-header {
+                display: flex !important; position: absolute; top: 0; left: 0; width: 100%; 
                 background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); 
-                padding: 10px 20px; box-sizing: border-box; 
-                transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+                padding: 15px 20px; z-index: 10000; justify-content: space-between; align-items: center;
+                transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
             
-            /* Overlay Toggle Classes */
-            body.mobile-playing .player-header-overlay.show-overlay,
-            body.mobile-playing .suggested-section.show-overlay { transform: translateY(0); }
+            body.mobile-playing .show-overlay .landscape-overlay { transform: translateY(0); }
+            body.mobile-playing .show-overlay .landscape-header { transform: translateY(0); }
         }
-        .player-header-overlay { display: none; }
+        
+        .landscape-overlay, .landscape-header { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>🔐 DARTV Live</h1>
+    <div class="app-bar" id="appBar">
+        <div class="app-logo"><span>DAR</span>TV</div>
+        <button class="btn btn-primary" id="navBackBtn" style="display:none;" onclick="goBackToDashboard()">✕ Close Player</button>
     </div>
 
     <div id="systemMessage">System Ready.</div>
 
     <div id="view-dashboard" class="view active">
-        <div class="dashboard-controls">
-            <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap; align-items: center; justify-content: center;">
-                <select id="sourceDropdown" class="source-dropdown"></select>
-                <button class="btn btn-warning" onclick="fetchSelectedSource()">⚡ Load Selected</button>
-                <button class="btn" onclick="fetchFromGitHub()">🔄 Sync GitHub</button>
-                <label class="btn btn-red" style="margin: 0; display: inline-block; cursor: pointer;">
-                    📂 Upload Local File
-                    <input type="file" id="fileLoader" accept=".json,.m3u,.m3u8" multiple style="display: none;">
+        <div class="dashboard-tools">
+            <div class="tool-row">
+                <select id="sourceDropdown" class="input-box"></select>
+                <button class="btn btn-primary" onclick="fetchSelectedSource()">Load List</button>
+                <button class="btn" onclick="fetchFromGitHub()">Sync Repos</button>
+                <label class="btn" style="cursor: pointer;">
+                    Upload File <input type="file" id="fileLoader" accept=".json,.m3u,.m3u8" multiple style="display: none;">
                 </label>
             </div>
-            
-            <div class="custom-input-group" style="width: 100%; display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="customSourceInput" class="custom-input" placeholder="🌐 Enter Custom M3U/JSON URL">
-                <button class="btn btn-warning" onclick="loadCustomSource()">📥 Fetch URL</button>
+            <div class="tool-row" style="margin-top: 10px;">
+                <input type="text" id="customSourceInput" class="input-box" placeholder="🌐 Enter Custom M3U/JSON URL or Repo (owner/repo)">
+                <button class="btn" onclick="loadCustomSource()">Fetch Custom Link</button>
             </div>
         </div>
 
+        <div class="section-title">📁 My Folders</div>
         <div id="playlistGrid" class="playlist-grid">
-            <div style="grid-column: 1 / -1; text-align: center; color: #555; margin-top: 40px;">
-                No playlists loaded.
-            </div>
+            <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">No playlists loaded. Sync repo, upload file, or paste custom URL.</div>
         </div>
     </div>
 
     <div id="view-player" class="view">
-        <div class="nav-bar">
-            <button class="btn btn-red" onclick="goBackToDashboard()" style="flex: 0 0 auto;">🔙 Back</button>
-            <select id="categoryFilter" class="category-dropdown" onchange="filterChannels()">
-                <option value="">📁 All Categories</option>
-            </select>
-            <div id="nowPlayingText" class="now-playing">📺 Select a channel</div>
+        
+        <div class="proxy-ribbon" id="proxyRibbon">
+            <label for="useStreamProxy">
+                <input type="checkbox" id="useStreamProxy">
+                <span id="proxyLabelText">🛡️ Strict Proxy Engine (Enable if blocked)</span>
+            </label>
         </div>
 
-        <div class="proxy-alert-box" id="proxyAlertBox">
-            <input type="checkbox" id="useStreamProxy">
-            <label for="useStreamProxy" id="proxyAlertLabel" style="font-weight: bold; cursor:pointer;">🛡️ CONNECT TO DAR PROXY SERVER</label>
-        </div>
-
-        <div class="player-container" id="playerWrapper">
-            <div class="player-header-overlay" id="landscapeHeaderOverlay">
-                <div class="now-playing" id="landscapeTitle" style="background:transparent; border:none; text-align:left; font-size: 16px; padding:0; flex:1;">📺 Playing</div>
-                <button class="btn btn-warning" id="manualOverlayToggle" style="margin-left:10px; padding:6px 12px; display:none;" onclick="toggleLandscapeOverlay()">📺 Channels</button>
-                <button class="btn btn-red" style="margin-left: 10px; padding: 6px 12px;" onclick="goBackToDashboard()">Close ✖</button>
+        <div class="player-wrapper" id="playerWrapper">
+            <div class="landscape-header">
+                <div style="font-weight: bold; font-size: 16px; color: #fff;" id="landscapeTitle">📺 Playing Channel</div>
+                <button class="btn btn-primary" style="padding: 6px 15px;" onclick="document.exitFullscreen().catch(e=>{}); goBackToDashboard();">✕ Close</button>
             </div>
 
-            <div class="video-filter-container" id="videoFilterContainer">
+            <div class="video-filter" id="videoFilterContainer">
                 <div id="jw-player-container">Player will load here...</div>
             </div>
             
             <div class="swipe-shield" id="swipeShield"></div>
-
-            <div id="gestureIndicator">🔊 50%</div>
-            <div id="dartv-error" class="custom-error">
-                <h2>⚠️ Stream Offline</h2>
-                <p id="errorReason">Try connecting DAR PROXY SERVER above.</p>
+            
+            <div class="gesture-ui gesture-ui-left" id="brightUI">
+                <div class="gesture-icon">☀️</div>
+                <div class="gesture-bar-bg"><div class="gesture-bar-fill" id="brightFill" style="height: 50%;"></div></div>
             </div>
 
-            <div class="suggested-section" id="overlaySection" style="display: none; border-radius: 0;">
-                <div class="suggested-title">📺 Related Channels</div>
+            <div class="gesture-ui gesture-ui-right" id="volUI">
+                <div class="gesture-icon">🔊</div>
+                <div class="gesture-bar-bg"><div class="gesture-bar-fill" id="volFill" style="height: 50%;"></div></div>
+            </div>
+
+            <div class="seek-indicator" id="seekUI">⏩ +10s</div>
+            
+            <div id="dartv-error" class="custom-error">
+                <h2>⚠️ Stream Interrupted</h2>
+                <p id="errorReason">The server refused the connection.<br>Try enabling the <strong>Strict Proxy Engine</strong> above.</p>
+            </div>
+
+            <div class="landscape-overlay">
+                <div class="section-title" style="font-size: 14px; margin-bottom: 5px;">🌟 Related Channels</div>
                 <div class="circular-container" id="landscapeChannelContainer"></div>
             </div>
         </div>
 
-        <div class="suggested-section" id="portraitSuggestedSection">
-            <div class="suggested-title">📁 Select Category</div>
-            <div class="circular-container" id="categoryCircularContainer"></div>
-            <div class="suggested-title" style="margin-top: 10px;">📺 <span>Channels in <span id="currentCatName">All</span></span></div>
-            <div class="circular-container" id="channelCircularContainer"></div>
+        <div class="search-container" style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="searchInput" class="input-box" placeholder="🔍 Search channels by name..." onkeyup="filterChannels()">
+            <div id="channelCount" style="color: var(--text-muted); font-size: 13px; font-weight: bold;">0 Chs</div>
         </div>
 
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search channels..." onkeyup="filterChannels()">
-            <div id="channelCount" class="channel-count">0 Channels</div>
+        <div class="suggested-section" id="portraitSuggestedSection">
+            <div class="suggested-title">📺 <span>Suggested Channels</span></div>
+            <div class="circular-container" id="portraitChannelContainer"></div>
         </div>
-        
+
+        <div class="category-scroll" id="categoryScroll"></div>
         <div id="channelGrid" class="channel-grid"></div>
     </div>
 
@@ -212,54 +237,54 @@
         let globalPlaylists = []; 
         let currentActiveChannels = []; 
         let currentlyPlayingChannel = null;
+        let activeCategoryFilter = "";
         const githubRepoApiUrl = "https://api.github.com/repos/dartv-ajaz/chaupal/contents/";
-        const defaultLogo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect width='150' height='150' fill='%231a1d24'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23ff0055' font-family='sans-serif' font-size='20'%3EDarTv%3C/text%3E%3C/svg%3E";
-
+        
+        // Exact 12 Sources Restored
         const SOURCES = [
-            { type: 'repo', label: "1. Repo: Live Sports Group A", value: "dartv-ajaz/Live-Sports-Group-A" },
-            { type: 'repo', label: "2. Repo: Chaupal", value: "dartv-ajaz/chaupal" },
-            { type: 'repo', label: "3. Repo: Sports", value: "srhady/Sports" },
+            { type: 'repo', label: "1. Repo: Crichd Special", value: "srhady/crichd-speical-live-event" },
+            { type: 'repo', label: "2. Repo: Data Playlists", value: "srhady/data" },
+            { type: 'repo', label: "3. Repo: Fancode BD", value: "srhady/Fancode-bd" },
             { type: 'repo', label: "4. Repo: SonyLiv", value: "srhady/SonyLiv" },
-            { type: 'link', label: "5. Global: Sports", value: "https://iptv-org.github.io/iptv/categories/sports.m3u" },
-            { type: 'link', label: "6. Custom: Pirates TV", value: "https://raw.githubusercontent.com/FunctionError/PiratesTv/refs/heads/main/combined_playlist.m3u" },
-            { type: 'link', label: "7. Custom: WC-2026", value: "https://raw.githubusercontent.com/Jazzdar1/darfree.tv/refs/heads/main/Subirmaxpro.m3u" }
+            { type: 'repo', label: "5. Repo: Live Sports Group A", value: "dartv-ajaz/Live-Sports-Group-A" },
+            { type: 'repo', label: "6. Repo: Chaupal", value: "dartv-ajaz/chaupal" },
+            { type: 'repo', label: "7. Repo: Sports", value: "srhady/Sports" },
+            { type: 'link', label: "8. Global: Sports", value: "https://iptv-org.github.io/iptv/categories/sports.m3u" },
+            { type: 'link', label: "9. Custom: Pirates TV", value: "https://raw.githubusercontent.com/FunctionError/PiratesTv/refs/heads/main/combined_playlist.m3u" },
+            { type: 'link', label: "10. Custom: WC-2026", value: "https://raw.githubusercontent.com/Jazzdar1/darfree.tv/refs/heads/main/Subirmaxpro.m3u" },
+            { type: 'link', label: "11. Custom: World CUP Max", value: "https://raw.githubusercontent.com/subirkumarpaul/Subirmaxpro/refs/heads/main/Subirmaxpro" },
+            { type: 'link', label: "12. Custom: Soledad TV", value: "https://raw.githubusercontent.com/Soledadrs/jiekou/606200413054f2e24f995e3c404393782db27704/soledadTVbox/m3u/IPTV.m3u" }
         ];
+
+        const defaultLogo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect width='150' height='150' fill='%2313151f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e50914' font-family='sans-serif' font-size='20'%3EDarTv%3C/text%3E%3C/svg%3E";
 
         function showMessage(msg, isError = false) {
             const el = document.getElementById('systemMessage');
             el.innerHTML = msg; el.style.display = 'block';
-            el.style.borderLeftColor = isError ? '#ff0055' : '#0f0';
-            el.style.color = isError ? '#ff0055' : '#fff';
+            el.style.borderLeftColor = isError ? '#ff5252' : '#2ed573';
             setTimeout(() => { el.style.display = 'none'; }, 3000);
         }
 
         // --- PROXY TOGGLE ---
         document.getElementById('useStreamProxy').addEventListener('change', function(e) {
-            const label = document.getElementById('proxyAlertLabel');
-            const box = document.getElementById('proxyAlertBox');
-            
+            const ribbon = document.getElementById('proxyRibbon');
+            const label = document.getElementById('proxyLabelText');
             if(e.target.checked) {
-                showMessage("🛡️ DAR PROXY SERVER IS GETTING CONNECTED...", false);
-                box.style.borderColor = "#00d2ff";
+                showMessage("Connecting Proxy Engine...");
                 setTimeout(() => {
-                    showMessage("✅ PROXY CONNECTED SUCCESSFULLY!", false);
-                    label.innerText = "🛡️ DAR PROXY SERVER CONNECTED";
-                    label.style.color = "#0f0";
-                    box.style.borderColor = "#0f0";
-                    box.classList.add('connected');
+                    ribbon.classList.add('connected');
+                    label.innerText = "🛡️ Proxy Engine Active";
+                    showMessage("✅ Proxy Connected!");
                     if (currentlyPlayingChannel) playChannel(currentlyPlayingChannel);
-                }, 1000);
+                }, 800);
             } else {
-                label.innerText = "🛡️ CONNECT TO DAR PROXY SERVER";
-                label.style.color = "var(--accent-alt)";
-                box.classList.remove('connected');
-                box.style.borderColor = "#333";
-                showMessage("❌ PROXY DISCONNECTED", true);
+                ribbon.classList.remove('connected');
+                label.innerText = "🛡️ Strict Proxy Engine (Enable if blocked)";
+                showMessage("❌ Proxy Disconnected", true);
                 if (currentlyPlayingChannel) setTimeout(() => playChannel(currentlyPlayingChannel), 500);
             }
         });
 
-        // --- FETCHING LOGIC ---
         function filterUniqueFiles(filesArray) {
             let uniqueFiles = {};
             for (let file of filesArray) {
@@ -280,7 +305,7 @@
         document.addEventListener("DOMContentLoaded", () => { 
             const dropdown = document.getElementById('sourceDropdown');
             SOURCES.forEach((s, idx) => { dropdown.innerHTML += `<option value="${idx}">${s.label}</option>`; });
-            fetchFromGitHub();
+            fetchFromGitHub(); // Auto fetch on load
         });
 
         function switchView(viewId) {
@@ -289,8 +314,10 @@
             
             if(viewId === 'view-player') {
                 document.body.classList.add('mobile-playing');
+                document.getElementById('navBackBtn').style.display = 'inline-flex';
             } else {
                 document.body.classList.remove('mobile-playing');
+                document.getElementById('navBackBtn').style.display = 'none';
                 currentlyPlayingChannel = null;
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -299,70 +326,102 @@
         function goBackToDashboard() {
             if (jwplayer("jw-player-container").getState) jwplayer("jw-player-container").stop();
             document.getElementById("dartv-error").style.display = "none";
-            document.getElementById("searchInput").value = ""; 
+            document.getElementById("searchInput").value = "";
             toggleLandscapeOverlay(false);
             switchView('view-dashboard');
         }
 
+        // --- CUSTOM SOURCE LOADER RESTORED ---
         async function loadCustomSource() {
             const val = document.getElementById('customSourceInput').value.trim();
-            if (!val) return showMessage("❌ Please enter a valid URL", true);
-            showMessage("⏳ Fetching...", false);
+            if (!val) return showMessage("Please enter a valid URL or Repo", true);
+            showMessage("Fetching Custom Source...");
+            
+            // Check if Repo
+            if (/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/.test(val)) {
+                await fetchDeepRepo(val.split('/')[0], val.split('/')[1]);
+                document.getElementById('customSourceInput').value = "";
+                return;
+            }
+
+            // Treat as URL
             try {
                 const res = await fetch(val);
                 const text = await res.text();
-                processFileContent("Custom_Playlist", text);
-                renderDashboard(); showMessage('✅ Loaded!', false);
+                let fileName = val.split('/').pop();
+                if (!fileName || !fileName.match(/\.(m3u|m3u8|json)$/i)) {
+                    fileName = text.trim().startsWith('{') || text.trim().startsWith('[') ? "Custom_Playlist.json" : "Custom_Playlist.m3u";
+                }
+                processFileContent(fileName, text);
+                renderDashboard(); showMessage('✅ Custom Source Loaded!');
             } catch(e) {
                 try {
                     const res = await fetch(CLOUDFLARE_PROXY_URL + encodeURIComponent(val));
                     const text = await res.text();
-                    processFileContent("Custom_Playlist", text);
-                    renderDashboard(); showMessage('✅ Loaded via Proxy!', false);
-                } catch(err) { showMessage("❌ Failed to fetch URL.", true); }
+                    let fileName = val.split('/').pop() || "Custom_Playlist.m3u";
+                    processFileContent(fileName, text);
+                    renderDashboard(); showMessage('✅ Custom Source Loaded via Proxy!');
+                } catch(err) { showMessage("❌ Failed to fetch Custom URL.", true); }
             }
             document.getElementById('customSourceInput').value = "";
+        }
+
+        // --- DEEP REPO FETCH LOGIC ---
+        async function fetchDeepRepo(owner, repo, path = "") {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+                if (!res.ok) throw new Error("Repo fetch failed");
+                const items = await res.json();
+                let allFiles = [];
+                
+                for (let item of items) {
+                    if (item.type === 'file' && item.name.match(/\.(json|m3u|m3u8)$/i)) {
+                        allFiles.push(item);
+                    } else if (item.type === 'dir') {
+                        let subFiles = await fetchDeepRepo(owner, repo, item.path);
+                        allFiles = allFiles.concat(subFiles);
+                    }
+                }
+                
+                // If it's the root call, process files
+                if (path === "") {
+                    const filtered = filterUniqueFiles(allFiles);
+                    for (let file of filtered) {
+                        let content = await (await fetch(file.download_url)).text();
+                        processFileContent(file.name, content);
+                    }
+                    renderDashboard(); showMessage(`✅ Repo Loaded: ${repo}`);
+                }
+                return allFiles;
+            } catch(e) { if(path === "") showMessage("❌ Repo Error", true); return [];}
         }
 
         async function fetchSelectedSource() {
             const idx = document.getElementById('sourceDropdown').value;
             if(idx === "") return;
             const source = SOURCES[idx];
-            showMessage('⏳ Loading...', false);
+            showMessage('Loading Source...');
             if (source.type === 'repo') {
-                await fetchRepoCustom(source.value.split('/')[0], source.value.split('/')[1]);
+                await fetchDeepRepo(source.value.split('/')[0], source.value.split('/')[1]);
             } else {
                 try {
                     const res = await fetch(source.value);
                     const text = await res.text();
                     processFileContent(source.label.split(': ')[1], text);
-                    renderDashboard(); showMessage('✅ Loaded!', false);
+                    renderDashboard(); showMessage('✅ Loaded!');
                 } catch(e) {
                     try {
                         const res = await fetch(CLOUDFLARE_PROXY_URL + encodeURIComponent(source.value));
                         const text = await res.text();
                         processFileContent(source.label.split(': ')[1], text);
-                        renderDashboard(); showMessage('✅ Loaded via Proxy!', false);
-                    } catch(err) { showMessage("❌ Failed.", true); }
+                        renderDashboard(); showMessage('✅ Loaded via Proxy!');
+                    } catch(err) { showMessage("❌ Failed to fetch link", true); }
                 }
             }
         }
 
-        async function fetchRepoCustom(owner, repo) {
-            try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/`);
-                const files = await res.json();
-                const filteredFiles = filterUniqueFiles(files.filter(f => f.type === 'file'));
-                for (let file of filteredFiles) {
-                    let content = await (await fetch(file.download_url)).text();
-                    processFileContent(file.name, content);
-                }
-                renderDashboard(); showMessage(`✅ Repo Loaded`, false);
-            } catch(e) { showMessage("❌ Repo Error", true); }
-        }
-
         async function fetchFromGitHub() {
-            showMessage('Scanning Default Auto Repos...');
+            showMessage('Deep Scanning Default Repo (May take time)...');
             try {
                 const response = await fetch(githubRepoApiUrl);
                 const files = await response.json();
@@ -373,8 +432,8 @@
                     fetchPromises.push(p);
                 }
                 await Promise.all(fetchPromises);
-                renderDashboard(); showMessage('✅ Synced Successfully!');
-            } catch (error) { showMessage("❌ Sync Error. Upload locally.", true); }
+                renderDashboard(); showMessage('✅ All Folders Synced!');
+            } catch (error) { showMessage("❌ API Limit reached. Upload local.", true); }
         }
 
         document.getElementById('fileLoader').addEventListener('change', function(e) {
@@ -387,14 +446,14 @@
                 reader.onload = function(evt) {
                     processFileContent(filteredFiles[i].name, evt.target.result);
                     filesRead++;
-                    if(filesRead === filteredFiles.length) { renderDashboard(); showMessage('✅ Uploaded!', false); }
+                    if(filesRead === filteredFiles.length) { renderDashboard(); showMessage('✅ Uploaded!'); }
                 };
                 reader.readAsText(filteredFiles[i]);
             }
             e.target.value = "";
         });
 
-        // --- PARSER ---
+        // --- PERFECT ENGINE PARSER ---
         function processFileContent(filename, content) {
             const ext = filename.split('.').pop().toLowerCase();
             let currentFileChannels = [];
@@ -417,7 +476,7 @@
                             currentFileChannels = currentFileChannels.concat(channels);
                         }
                     }
-                } catch(err) { }
+                } catch(err) {}
             } 
             else if (['m3u', 'm3u8'].includes(ext) || content.includes('#EXTINF')) {
                 const lines = content.split('\n');
@@ -447,7 +506,7 @@
             }
 
             if (currentFileChannels.length > 0) {
-                globalPlaylists.push({ id: Date.now() + Math.random(), title: filename, channels: currentFileChannels });
+                globalPlaylists.push({ id: Date.now() + Math.random(), title: filename.replace(/\.(m3u|json|m3u8)$/i,''), channels: currentFileChannels });
             }
         }
 
@@ -455,7 +514,7 @@
         function renderDashboard() {
             const grid = document.getElementById('playlistGrid');
             grid.innerHTML = '';
-            if (globalPlaylists.length === 0) { grid.innerHTML = '<div style="text-align: center; color: #555; grid-column: 1/-1;">No playlists loaded.</div>'; return; }
+            if (globalPlaylists.length === 0) { grid.innerHTML = '<div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 40px 0;">No playlists loaded. Sync repo or upload file.</div>'; return; }
 
             globalPlaylists.forEach(playlist => {
                 const card = document.createElement('div'); card.className = 'playlist-card';
@@ -472,78 +531,75 @@
             const playlist = globalPlaylists.find(p => p.id === id);
             if(!playlist) return;
             currentActiveChannels = playlist.channels;
-            
-            const filterDrop = document.getElementById('categoryFilter');
-            filterDrop.innerHTML = '<option value="">📁 All Categories</option>';
-            const uniqueGroups = [...new Set(currentActiveChannels.map(c => c.group || 'Uncategorized'))].sort();
-            uniqueGroups.forEach(g => { filterDrop.innerHTML += `<option value="${g}">${g}</option>`; });
-
+            activeCategoryFilter = ""; 
             document.getElementById('searchInput').value = ""; 
+            
             switchView('view-player');
-            renderCategoryCircles();
+            renderCategoryPills();
             filterChannels();
 
             if(currentActiveChannels.length > 0) playChannel(currentActiveChannels[0]);
         }
 
-        // --- CATEGORIES & CHANNELS RENDER (PORTRAIT + LANDSCAPE) ---
-        function renderCategoryCircles() {
-            const cPortrait = document.getElementById('categoryCircularContainer');
-            cPortrait.innerHTML = "";
-            let activeCategoryFilter = "";
+        // --- CATEGORIES & CHANNELS RENDER ---
+        function renderCategoryPills() {
+            const cScroll = document.getElementById('categoryScroll');
+            cScroll.innerHTML = "";
             const uniqueGroups = [...new Set(currentActiveChannels.map(c => c.group || 'Uncategorized'))].sort();
             
-            const makeCatBtn = (name, targetValue) => {
-                let shortName = name.length > 10 ? name.substring(0, 9) + ".." : name;
-                let btn = document.createElement('div'); btn.className = `circle-tile category-tile`;
-                btn.innerHTML = `<span>${shortName}</span>`;
+            const makeBtn = (name, targetValue) => {
+                let btn = document.createElement('button'); 
+                btn.className = `cat-pill ${activeCategoryFilter === targetValue ? "active" : ""}`;
+                btn.innerText = name;
                 btn.onclick = () => { 
                     activeCategoryFilter = targetValue; 
-                    document.getElementById('currentCatName').innerText = name; 
-                    filterChannels(targetValue); 
+                    renderCategoryPills(); filterChannels(); 
                 };
-                cPortrait.appendChild(btn);
+                cScroll.appendChild(btn);
             };
-            makeCatBtn("All", ""); 
-            uniqueGroups.forEach(g => makeCatBtn(g, g)); 
+            makeBtn("All", ""); uniqueGroups.forEach(g => makeBtn(g, g)); 
         }
 
-        function filterChannels(categoryFilter = "") {
+        function filterChannels() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = currentActiveChannels.filter(c => {
                 const matchesSearch = c.name.toLowerCase().includes(term);
-                const matchesGroup = categoryFilter === "" || (c.group || 'Uncategorized') === categoryFilter;
+                const matchesGroup = activeCategoryFilter === "" || (c.group || 'Uncategorized') === activeCategoryFilter;
                 return matchesSearch && matchesGroup;
             });
             renderChannelGrid(filtered);     
-            renderChannelCircles(filtered);   
+            renderCircularChannels(filtered); // Populate the gool-gool UI
         }
 
-        function renderChannelCircles(channels) {
-            const cPortrait = document.getElementById('channelCircularContainer');
-            const cLandscape = document.getElementById('landscapeChannelContainer');
-            cPortrait.innerHTML = ""; cLandscape.innerHTML = "";
+        // 🔥 GOOL GOOL CHANNELS RENDERER (PORTRAIT & LANDSCAPE) 🔥
+        function renderCircularChannels(channels) {
+            const pContainer = document.getElementById('portraitChannelContainer');
+            const lContainer = document.getElementById('landscapeChannelContainer');
+            pContainer.innerHTML = ""; lContainer.innerHTML = "";
             
-            channels.slice(0, 60).forEach((ch) => { 
-                // Portrait logic
-                const circle = document.createElement('div'); circle.className = 'circle-tile'; 
-                if(ch.logo) { circle.style.backgroundImage = `url('${ch.logo}')`; }
-                let shortName = ch.name.length > 13 ? ch.name.substring(0, 11) + ".." : ch.name;
-                circle.innerHTML = `<span>${shortName}</span>`;
-                circle.onclick = () => playChannel(ch); 
-                cPortrait.appendChild(circle);
+            channels.slice(0, 50).forEach((ch) => { 
+                const circleHTML = `<span>${ch.name}</span>`;
+                
+                // Portrait Item
+                const pCircle = document.createElement('div'); pCircle.className = 'circle-tile'; pCircle.title = ch.name;
+                if(ch.logo) { pCircle.style.backgroundImage = `url('${ch.logo}')`; }
+                pCircle.innerHTML = circleHTML;
+                pCircle.onclick = () => playChannel(ch); 
+                pContainer.appendChild(pCircle);
 
-                // Landscape Clone
-                const clone = circle.cloneNode(true);
-                clone.onclick = () => { playChannel(ch); toggleLandscapeOverlay(false); } // Auto hide overlay on select
-                cLandscape.appendChild(clone);
+                // Landscape Item (Exact Same Clone)
+                const lCircle = document.createElement('div'); lCircle.className = 'circle-tile'; lCircle.title = ch.name;
+                if(ch.logo) { lCircle.style.backgroundImage = `url('${ch.logo}')`; }
+                lCircle.innerHTML = circleHTML;
+                lCircle.onclick = () => { playChannel(ch); toggleLandscapeOverlay(false); }; 
+                lContainer.appendChild(lCircle);
             });
         }
 
         function renderChannelGrid(channelsToRender) {
             const grid = document.getElementById('channelGrid');
             grid.innerHTML = '';
-            document.getElementById('channelCount').innerText = `${channelsToRender.length} Channels`;
+            document.getElementById('channelCount').innerText = `${channelsToRender.length} Chs`;
 
             channelsToRender.forEach(channel => {
                 const card = document.createElement('div'); card.className = 'channel-card';
@@ -556,28 +612,25 @@
 
         // --- LANDSCAPE OVERLAY TOGGLE ---
         let overlayTimeout;
-        const suggSection = document.getElementById('overlaySection');
-        const pHeader = document.getElementById('landscapeHeaderOverlay');
-        const manToggleBtn = document.getElementById('manualOverlayToggle');
+        const playerWrapperElement = document.getElementById('playerWrapper');
 
         function toggleLandscapeOverlay(forceShow) {
             const isLandscape = window.matchMedia("(orientation: landscape)").matches && window.innerWidth <= 1200;
             if (!isLandscape) return;
             
-            const isShowing = suggSection.classList.contains('show-overlay');
+            const isShowing = playerWrapperElement.classList.contains('show-overlay');
             if (forceShow === true || (forceShow === undefined && !isShowing)) {
-                suggSection.classList.add('show-overlay'); pHeader.classList.add('show-overlay');
-                manToggleBtn.style.display = 'inline-block';
+                playerWrapperElement.classList.add('show-overlay');
                 clearTimeout(overlayTimeout);
                 overlayTimeout = setTimeout(() => { 
-                    suggSection.classList.remove('show-overlay'); pHeader.classList.remove('show-overlay'); 
+                    playerWrapperElement.classList.remove('show-overlay');
                 }, 5000);
             } else if (forceShow === false || (forceShow === undefined && isShowing)) {
-                suggSection.classList.remove('show-overlay'); pHeader.classList.remove('show-overlay');
+                playerWrapperElement.classList.remove('show-overlay');
             }
         }
 
-        // --- PLAYER ENGINE ---
+        // --- PLAYBACK ENGINE ---
         function determineStreamType(url) {
             const cleanUrl = url.split('?')[0].toLowerCase();
             if (cleanUrl.endsWith('.mpd')) return 'dash';
@@ -589,14 +642,18 @@
         function playChannel(channel) {
             currentlyPlayingChannel = channel;
             document.getElementById("dartv-error").style.display = "none";
-            document.getElementById("nowPlayingText").innerText = `📺 Playing: ${channel.name}`;
             document.getElementById("landscapeTitle").innerText = `📺 ${channel.name}`;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            if (!(window.innerWidth <= 1200 && window.matchMedia("(orientation: landscape)").matches)) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
 
-            currentBrightness = 100;
-            document.getElementById('videoFilterContainer').style.filter = `brightness(100%)`;
+            // Sync the "Gool Gool" channels based on currently playing group
+            if(channel.group) {
+                const related = currentActiveChannels.filter(c => c.group === channel.group);
+                renderCircularChannels(related);
+            }
 
-            // 🔥 APPLY PROXY HEADERS IF TICKED 🔥
             let finalUrl = channel.url;
             const useProxy = document.getElementById('useStreamProxy').checked;
 
@@ -611,7 +668,7 @@
             }
 
             let setupConfig = {
-                file: finalUrl, width: "100%", aspectratio: "16:9", autostart: true, cast: {}, controls: true, displaytitle: true, playbackRateControls: true
+                file: finalUrl, width: "100%", aspectratio: "16:9", autostart: true, cast: {}, controls: true, displaytitle: false
             };
 
             const streamType = determineStreamType(channel.url);
@@ -633,25 +690,31 @@
             const playerInstance = jwplayer("jw-player-container").setup(setupConfig);
             
             playerInstance.on('error', function(e) {
-                document.getElementById("errorReason").innerHTML = `Code ${e.code}. Stream Blocked.<br>Please tick the Proxy Checkbox above.`;
                 document.getElementById("dartv-error").style.display = "flex";
             });
             playerInstance.on('setupError', function(e) {
-                document.getElementById("errorReason").innerHTML = "Setup Failed. Run on Localhost.";
                 document.getElementById("dartv-error").style.display = "flex";
             });
         }
 
-        // --- SWIPE GESTURES (OVERLAY SHIELD) ---
+        // --- MX PLAYER STYLE GESTURES (SMOOTH UI) ---
         const swipeShield = document.getElementById('swipeShield');
         const videoFilter = document.getElementById('videoFilterContainer');
+        const brightUI = document.getElementById('brightUI');
+        const brightFill = document.getElementById('brightFill');
+        const volUI = document.getElementById('volUI');
+        const volFill = document.getElementById('volFill');
+        const seekUI = document.getElementById('seekUI');
+
         let startX, startY, initVol, initPos, isTouchArea, isTap;
         let currentBrightness = 100;
 
         swipeShield.addEventListener('touchstart', (e) => {
             if(e.touches.length !== 1) return;
-            isTap = true;
-            startX = e.touches[0].clientX; startY = e.touches[0].clientY; 
+            const rect = swipeShield.getBoundingClientRect();
+            if(e.touches[0].clientY - rect.top > rect.height * 0.8) return; 
+            
+            isTap = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; 
             try { initVol = jwplayer("jw-player-container").getVolume() || 50; initPos = jwplayer("jw-player-container").getPosition() || 0; } catch(err) { initVol = 50; initPos = 0; }
             isTouchArea = true;
         }, {passive: true});
@@ -661,23 +724,19 @@
             const dx = e.touches[0].clientX - startX; const dy = startY - e.touches[0].clientY; 
             if (Math.abs(dx) > 10 || Math.abs(dy) > 10) isTap = false;
             
-            const ind = document.getElementById('gestureIndicator');
             const rect = swipeShield.getBoundingClientRect();
             const isLeftSide = startX < (rect.left + rect.width / 2);
 
             if(Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 20) {
                 e.preventDefault(); 
                 if (isLeftSide) {
-                    // Brightness 200% (Left Side)
-                    currentBrightness = Math.max(10, Math.min(200, currentBrightness + (dy / 1.5)));
+                    currentBrightness = Math.max(10, Math.min(200, currentBrightness + (dy / 2)));
                     videoFilter.style.filter = `brightness(${currentBrightness}%)`;
-                    ind.style.display = 'block'; ind.innerText = `☀️ ${Math.round(currentBrightness)}%`;
+                    brightUI.style.display = 'flex'; brightFill.style.height = `${currentBrightness/2}%`;
                 } else {
-                    // Volume 200% Fake Display, Physical capped at 100 (Right Side)
                     let physicalVol = Math.max(0, Math.min(100, initVol + (dy / 2)));
                     try { jwplayer("jw-player-container").setVolume(physicalVol); } catch(err) {}
-                    let displayVol = Math.round(physicalVol * 2); // Show up to 200%
-                    ind.style.display = 'block'; ind.innerText = `🔊 ${displayVol}%`;
+                    volUI.style.display = 'flex'; volFill.style.height = `${physicalVol}%`;
                 }
             } 
             else if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 20) {
@@ -687,8 +746,8 @@
                     if(dur > 0) { 
                         let p = Math.max(0, Math.min(dur, initPos + (dx / 4)));
                         jwplayer("jw-player-container").seek(p);
-                        ind.style.display = 'block';
-                        ind.innerText = dx > 0 ? `⏩ +${Math.round(dx/4)}s` : `⏪ ${Math.round(dx/4)}s`;
+                        seekUI.style.display = 'flex';
+                        seekUI.innerText = dx > 0 ? `⏩ +${Math.round(dx/4)}s` : `⏪ ${Math.round(dx/4)}s`;
                     }
                 } catch(err) {}
             }
@@ -696,17 +755,25 @@
 
         swipeShield.addEventListener('touchend', () => {
             isTouchArea = false;
-            setTimeout(() => { document.getElementById('gestureIndicator').style.display = 'none'; }, 800);
+            setTimeout(() => { brightUI.style.display = 'none'; volUI.style.display = 'none'; seekUI.style.display = 'none'; }, 800);
             
-            // Failsafe tap to show landscape overlay
-            if (isTap) { toggleLandscapeOverlay(); }
+            // 🔥 LANDSCAPE OVERLAY TOGGLE TRIGGER 🔥
+            if (isTap && window.matchMedia("(orientation: landscape)").matches && window.innerWidth <= 1200) { 
+                toggleLandscapeOverlay();
+            }
         });
 
         // Auto trigger overlay on rotate
         window.addEventListener("orientationchange", function() {
             setTimeout(() => {
                 if (document.body.classList.contains('mobile-playing')) {
-                    if(window.matchMedia("(orientation: landscape)").matches) { window.scrollTo(0, 0); toggleLandscapeOverlay(true); }
+                    if(window.matchMedia("(orientation: landscape)").matches) { 
+                        document.documentElement.requestFullscreen().catch(e=>{});
+                        window.scrollTo(0, 0); 
+                        toggleLandscapeOverlay(true);
+                    } else {
+                        document.exitFullscreen().catch(e=>{});
+                    }
                 }
             }, 300);
         });
